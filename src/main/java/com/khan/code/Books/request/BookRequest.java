@@ -1,26 +1,19 @@
-package com.khan.code.Books.entity;
+package com.khan.code.Books.request;
 
-public class Book {
+public class BookRequest {
 
-    private long id;
     private String title;
     private String author;
     private String category;
     private int rating;
 
-    public Book(long id, String title, String author, String category, int rating) {
-        this.id = id;
+    public BookRequest(String title, String author, String category, int rating) {
         this.title = title;
         this.author = author;
         this.category = category;
         this.rating = rating;
     }
 
-    public Book(String title, String author, String category) {
-        this.title = title;
-        this.author = author;
-        this.category = category;
-    }
 
     public String getTitle() {
         return title;
@@ -46,14 +39,6 @@ public class Book {
         this.category = category;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public int getRating() {
         return rating;
     }
@@ -64,9 +49,8 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
+        return "BookRequest{" +
+                "title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", category='" + category + '\'' +
                 ", rating=" + rating +
