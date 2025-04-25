@@ -1,6 +1,8 @@
 package com.khan.code.Books.controller;
 
 import com.khan.code.Books.entity.Book;
+import com.khan.code.Books.exception.BookErrorResponse;
+import com.khan.code.Books.exception.BookNotFoundException;
 import com.khan.code.Books.request.BookRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -8,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -35,14 +38,13 @@ public class BookController {
 
     @Operation(summary = "Get a book by Id", description = "Retrieve a specific book by Id")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}")
-    public Book getBook(@Parameter(description = "Id if book to be retrieved") @PathVariable @Min(value = 1) long id) {
-
-
+    @GetMapping("/id/{id}")
+    public Book getBookById(@Parameter(description = "Id of book to be retrieved")
+                            @PathVariable @Min(value = 1) long id) {
         return books.stream()
-                .filter(book -> book.getId() ==id)
+                .filter(book -> book.getId() == id)
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new BookNotFoundException("Book not found - " + id));
     }
 
 
@@ -109,6 +111,17 @@ public class BookController {
 
     private Book convertToBook(long id, BookRequest bookRequest) {
         return new Book(id, bookRequest.getTitle(), bookRequest.getAuthor(), bookRequest.getCategory(), bookRequest.getRating());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<BookErrorResponse> handleException(BookNotFoundException exec) {
+        BookErrorResponse bookErrorResponse = new BookErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                exec.getMessage(),
+                System.currentTimeMillis()
+        );
+
+        return new ResponseEntity<>(bookErrorResponse, HttpStatus.NOT_FOUND);
     }
 
 }
