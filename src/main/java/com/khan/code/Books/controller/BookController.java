@@ -2,6 +2,8 @@ package com.khan.code.Books.controller;
 
 import com.khan.code.Books.entity.Book;
 import com.khan.code.Books.request.BookRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Tag(name = "Books Rest API Endpoints", description = "Operation related to Book")
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
@@ -28,6 +31,8 @@ public class BookController {
         initializeBooks();
     }
 
+
+    @Operation(summary = "Get a book by Id", description = "Retrieve a specific book by Id")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public Book getBook(@PathVariable @Min(value = 1) long id) {
@@ -40,6 +45,7 @@ public class BookController {
     }
 
 
+    @Operation(summary = "Get all books", description = "Retrieve a list of all available books")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<Book> getBooks(@RequestParam(required = false) String category) {
@@ -54,6 +60,8 @@ public class BookController {
     }
 
 
+
+    @Operation(summary = "Get a book by title", description = "Retrieve a specific book by title")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{title}")
     public Book getBookByName(@PathVariable String title) {
@@ -62,6 +70,8 @@ public class BookController {
     }
 
 
+
+    @Operation(summary = "Create book", description = "create book")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void createBook(@Valid @RequestBody BookRequest bookRequest) {
@@ -73,6 +83,8 @@ public class BookController {
 
     }
 
+
+    @Operation(summary = "Update a book", description = "Update the details of an existing book")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
     public void updateBook(@PathVariable @Min(value = 1) long id, @Valid @RequestBody BookRequest bookRequest) {
@@ -86,6 +98,8 @@ public class BookController {
         }
     }
 
+
+    @Operation(summary = "Delete book by Id", description = "Remove a book from the book list")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable @Min(value = 1) long id) {
