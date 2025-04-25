@@ -4,6 +4,7 @@ import com.khan.code.Books.entity.Book;
 import com.khan.code.Books.request.BookRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class BookController {
         initializeBooks();
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public Book getBook(@PathVariable @Min(value = 1) long id) {
 
@@ -37,6 +39,8 @@ public class BookController {
                 .orElse(null);
     }
 
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<Book> getBooks(@RequestParam(required = false) String category) {
 
@@ -49,12 +53,16 @@ public class BookController {
 
     }
 
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{title}")
     public Book getBookByName(@PathVariable String title) {
 
         return books.stream().filter(book -> book.getTitle().equalsIgnoreCase(title)).findFirst().orElse(null);
     }
 
+
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void createBook(@Valid @RequestBody BookRequest bookRequest) {
 
@@ -65,6 +73,7 @@ public class BookController {
 
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
     public void updateBook(@PathVariable @Min(value = 1) long id, @Valid @RequestBody BookRequest bookRequest) {
 
@@ -77,6 +86,7 @@ public class BookController {
         }
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable @Min(value = 1) long id) {
         books.removeIf(book -> book.getId() == id);
