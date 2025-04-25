@@ -3,6 +3,7 @@ package com.khan.code.Books.controller;
 import com.khan.code.Books.entity.Book;
 import com.khan.code.Books.request.BookRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -35,7 +36,7 @@ public class BookController {
     @Operation(summary = "Get a book by Id", description = "Retrieve a specific book by Id")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public Book getBook(@PathVariable @Min(value = 1) long id) {
+    public Book getBook(@Parameter(description = "Id if book to be retrieved") @PathVariable @Min(value = 1) long id) {
 
 
         return books.stream()
@@ -48,7 +49,7 @@ public class BookController {
     @Operation(summary = "Get all books", description = "Retrieve a list of all available books")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public List<Book> getBooks(@RequestParam(required = false) String category) {
+    public List<Book> getBooks(@Parameter(description = "Optional query parameter ")  @RequestParam(required = false) String category) {
 
         if(category == null) {
             return books;
@@ -87,7 +88,7 @@ public class BookController {
     @Operation(summary = "Update a book", description = "Update the details of an existing book")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
-    public void updateBook(@PathVariable @Min(value = 1) long id, @Valid @RequestBody BookRequest bookRequest) {
+    public void updateBook(@Parameter(description = "Id of the book to update") @PathVariable @Min(value = 1) long id, @Valid @RequestBody BookRequest bookRequest) {
 
         for(int i =0; i<books.size(); i++) {
             if(books.get(i).getId() == id) {
@@ -102,7 +103,7 @@ public class BookController {
     @Operation(summary = "Delete book by Id", description = "Remove a book from the book list")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void deleteBook(@PathVariable @Min(value = 1) long id) {
+    public void deleteBook(@Parameter(description = "Id of the book to delete") @PathVariable @Min(value = 1) long id) {
         books.removeIf(book -> book.getId() == id);
     }
 
