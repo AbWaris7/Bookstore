@@ -2,6 +2,7 @@ package com.khan.code.Books.controller;
 
 import com.khan.code.Books.entity.Book;
 import com.khan.code.Books.request.BookRequest;
+import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,7 +27,9 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public Book getBook(@PathVariable long id) {
+    public Book getBook(@PathVariable @Min(value = 1) long id) {
+
+
         return books.stream()
                 .filter(book -> book.getId() ==id)
                 .findFirst()
@@ -62,7 +65,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public void updateBook(@PathVariable long id, @RequestBody BookRequest bookRequest) {
+    public void updateBook(@PathVariable @Min(value = 1) long id, @RequestBody BookRequest bookRequest) {
 
         for(int i =0; i<books.size(); i++) {
             if(books.get(i).getId() == id) {
@@ -74,7 +77,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBook(@PathVariable long id) {
+    public void deleteBook(@PathVariable @Min(value = 1) long id) {
         books.removeIf(book -> book.getId() == id);
     }
 
